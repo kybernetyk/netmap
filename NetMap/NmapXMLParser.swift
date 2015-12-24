@@ -32,23 +32,22 @@ extension NmapXMLParser {
         var router = Node(id: self.nextNodeID++, type: .Host)
         router.address = "10.0.0.1"
         router.hostname = "nighthawk.local"
-        rootNode.children.append(router)
+        rootNode.appendChild(router)
 
         var rpi = Node(id: self.nextNodeID++, type: .Host)
         rpi.address = "10.0.0.2"
         rpi.hostname = "raspberrypi.local"
-        rootNode.children.append(rpi)
+        rootNode.appendChild(rpi)
 
         var macbook = Node(id: self.nextNodeID++, type: .Host)
         macbook.address = "10.0.0.11"
         macbook.hostname = "ducks-macbook.local"
-        rootNode.children.append(macbook)
+        rootNode.appendChild(macbook)
 
         var weles = Node(id: self.nextNodeID++, type: .Host)
         weles.address = "10.0.0.23"
         weles.hostname = "weles.celestialmachines.com"
-        rootNode.children.append(weles)
-
+        rootNode.appendChild(weles)
 
         return rootNode
     }

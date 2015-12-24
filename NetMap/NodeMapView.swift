@@ -35,17 +35,17 @@ extension NodeMapView {
         NSColor.redColor().set()
         NSRectFill(self.bounds)
         
-        self.drawTree(self.rootNode)
+        self.drawTree(self.rootNode, parent: nil)
         
     }
     
-    func drawTree(root: Node) {
+    func drawTree(root: Node, parent: Node?) {
         if let d = self.findDrawableByNodeID(root.id) {
-            NSLog("drawing \(d): \(root.hostname)")
+            NSLog("drawing \(d): \(root.hostname), parent: \(parent?.hostname)")
         }
         
         for c in root.children {
-            drawTree(c)
+            drawTree(c, parent:  root)
         }
         
     }
@@ -55,6 +55,13 @@ extension NodeMapView {
 extension NodeMapView {
     func findDrawableByNodeID(nodeID: Int) -> MapViewDrawable? {
         return self.drawables.filter({ return $0.nodeID == nodeID }).first
+    }
+    
+    func findNodeByID(root: Node, nodeID: Int) -> Node? {
+        if root.id == nodeID {
+            return root
+        }
+        return root.childByID(nodeID)
     }
 
     func flattenTree(root: Node) -> [MapViewDrawable] {
