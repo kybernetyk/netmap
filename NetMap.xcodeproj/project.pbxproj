@@ -10,6 +10,15 @@
 		0D373A391C2C872200B4DE88 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D373A381C2C872200B4DE88 /* AppDelegate.swift */; };
 		0D373A3B1C2C872200B4DE88 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0D373A3A1C2C872200B4DE88 /* Assets.xcassets */; };
 		0D373A3E1C2C872200B4DE88 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0D373A3C1C2C872200B4DE88 /* MainMenu.xib */; };
+		0D373A471C2C874500B4DE88 /* Workspace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D373A461C2C874500B4DE88 /* Workspace.swift */; };
+		0D373A491C2C875800B4DE88 /* Project.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D373A481C2C875800B4DE88 /* Project.swift */; };
+		0D373A4B1C2C87BA00B4DE88 /* NmapXMLParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D373A4A1C2C87BA00B4DE88 /* NmapXMLParser.swift */; };
+		0D373A4E1C2C890900B4DE88 /* MapWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D373A4C1C2C890900B4DE88 /* MapWindowController.swift */; };
+		0D373A4F1C2C890900B4DE88 /* MapWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0D373A4D1C2C890900B4DE88 /* MapWindowController.xib */; };
+		0D373A541C2C8C1100B4DE88 /* NodeMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D373A521C2C8C1100B4DE88 /* NodeMapViewController.swift */; };
+		0D373A551C2C8C1100B4DE88 /* NodeMapViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0D373A531C2C8C1100B4DE88 /* NodeMapViewController.xib */; };
+		0D373A581C2C8C2600B4DE88 /* NodeMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D373A571C2C8C2600B4DE88 /* NodeMapView.swift */; };
+		0D373A5B1C2C8EF000B4DE88 /* Node.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D373A5A1C2C8EF000B4DE88 /* Node.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -18,6 +27,15 @@
 		0D373A3A1C2C872200B4DE88 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		0D373A3D1C2C872200B4DE88 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		0D373A3F1C2C872200B4DE88 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		0D373A461C2C874500B4DE88 /* Workspace.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Workspace.swift; sourceTree = "<group>"; };
+		0D373A481C2C875800B4DE88 /* Project.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Project.swift; sourceTree = "<group>"; };
+		0D373A4A1C2C87BA00B4DE88 /* NmapXMLParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NmapXMLParser.swift; sourceTree = "<group>"; };
+		0D373A4C1C2C890900B4DE88 /* MapWindowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapWindowController.swift; sourceTree = "<group>"; };
+		0D373A4D1C2C890900B4DE88 /* MapWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MapWindowController.xib; sourceTree = "<group>"; };
+		0D373A521C2C8C1100B4DE88 /* NodeMapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NodeMapViewController.swift; sourceTree = "<group>"; };
+		0D373A531C2C8C1100B4DE88 /* NodeMapViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NodeMapViewController.xib; sourceTree = "<group>"; };
+		0D373A571C2C8C2600B4DE88 /* NodeMapView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NodeMapView.swift; sourceTree = "<group>"; };
+		0D373A5A1C2C8EF000B4DE88 /* Node.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Node.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -50,12 +68,53 @@
 		0D373A371C2C872200B4DE88 /* NetMap */ = {
 			isa = PBXGroup;
 			children = (
+				0D373A501C2C890D00B4DE88 /* Map Window */,
+				0D373A451C2C872900B4DE88 /* Model */,
 				0D373A381C2C872200B4DE88 /* AppDelegate.swift */,
 				0D373A3A1C2C872200B4DE88 /* Assets.xcassets */,
 				0D373A3C1C2C872200B4DE88 /* MainMenu.xib */,
 				0D373A3F1C2C872200B4DE88 /* Info.plist */,
 			);
 			path = NetMap;
+			sourceTree = "<group>";
+		};
+		0D373A451C2C872900B4DE88 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				0D373A461C2C874500B4DE88 /* Workspace.swift */,
+				0D373A481C2C875800B4DE88 /* Project.swift */,
+				0D373A4A1C2C87BA00B4DE88 /* NmapXMLParser.swift */,
+				0D373A5A1C2C8EF000B4DE88 /* Node.swift */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
+		0D373A501C2C890D00B4DE88 /* Map Window */ = {
+			isa = PBXGroup;
+			children = (
+				0D373A511C2C8BF500B4DE88 /* Node Map View */,
+				0D373A4C1C2C890900B4DE88 /* MapWindowController.swift */,
+				0D373A4D1C2C890900B4DE88 /* MapWindowController.xib */,
+			);
+			name = "Map Window";
+			sourceTree = "<group>";
+		};
+		0D373A511C2C8BF500B4DE88 /* Node Map View */ = {
+			isa = PBXGroup;
+			children = (
+				0D373A561C2C8C1500B4DE88 /* NodeMapView */,
+				0D373A521C2C8C1100B4DE88 /* NodeMapViewController.swift */,
+				0D373A531C2C8C1100B4DE88 /* NodeMapViewController.xib */,
+			);
+			name = "Node Map View";
+			sourceTree = "<group>";
+		};
+		0D373A561C2C8C1500B4DE88 /* NodeMapView */ = {
+			isa = PBXGroup;
+			children = (
+				0D373A571C2C8C2600B4DE88 /* NodeMapView.swift */,
+			);
+			name = NodeMapView;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -116,6 +175,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0D373A4F1C2C890900B4DE88 /* MapWindowController.xib in Resources */,
+				0D373A551C2C8C1100B4DE88 /* NodeMapViewController.xib in Resources */,
 				0D373A3B1C2C872200B4DE88 /* Assets.xcassets in Resources */,
 				0D373A3E1C2C872200B4DE88 /* MainMenu.xib in Resources */,
 			);
@@ -128,7 +189,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0D373A581C2C8C2600B4DE88 /* NodeMapView.swift in Sources */,
+				0D373A4B1C2C87BA00B4DE88 /* NmapXMLParser.swift in Sources */,
+				0D373A4E1C2C890900B4DE88 /* MapWindowController.swift in Sources */,
+				0D373A5B1C2C8EF000B4DE88 /* Node.swift in Sources */,
 				0D373A391C2C872200B4DE88 /* AppDelegate.swift in Sources */,
+				0D373A541C2C8C1100B4DE88 /* NodeMapViewController.swift in Sources */,
+				0D373A471C2C874500B4DE88 /* Workspace.swift in Sources */,
+				0D373A491C2C875800B4DE88 /* Project.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

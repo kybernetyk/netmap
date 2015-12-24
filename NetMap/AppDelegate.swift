@@ -10,12 +10,18 @@ import Cocoa
 
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
-
-    @IBOutlet weak var window: NSWindow!
-
-
+    var workspace = Workspace()
+    var controllers: [MapWindowController] = []
+    
     func applicationDidFinishLaunching(aNotification: NSNotification) {
-        // Insert code here to initialize your application
+        guard let p = self.workspace.newProjectFromFile("/Users/kyb/Downloads/scan.xml") else {
+            NSLog("fail!")
+            return
+        }
+        let c = MapWindowController(project: p)
+        self.controllers.append(c)
+        
+        c.showWindow(nil)
     }
 
     func applicationWillTerminate(aNotification: NSNotification) {
