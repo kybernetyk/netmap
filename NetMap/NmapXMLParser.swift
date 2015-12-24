@@ -25,12 +25,31 @@ class NmapXMLParser {
 
 extension NmapXMLParser {
     func makeTree() -> Node? {
-        var rootNode = Node(id: self.nextNodeID, type: .Host)
-        rootNode.address = "127.0.0.1"
-        rootNode.hostname = "Localhorst"
-        
-        //really, let's remove ++ ... m(
-        self.nextNodeID = self.nextNodeID + 1
+        var rootNode = Node(id: self.nextNodeID++, type: .Network)
+        rootNode.address = "10.0.0.0/24"
+        rootNode.hostname = "Localnet"
+
+        var router = Node(id: self.nextNodeID++, type: .Host)
+        router.address = "10.0.0.1"
+        router.hostname = "nighthawk.local"
+        rootNode.children.append(router)
+
+        var rpi = Node(id: self.nextNodeID++, type: .Host)
+        rpi.address = "10.0.0.2"
+        rpi.hostname = "raspberrypi.local"
+        rootNode.children.append(rpi)
+
+        var macbook = Node(id: self.nextNodeID++, type: .Host)
+        macbook.address = "10.0.0.11"
+        macbook.hostname = "ducks-macbook.local"
+        rootNode.children.append(macbook)
+
+        var weles = Node(id: self.nextNodeID++, type: .Host)
+        weles.address = "10.0.0.23"
+        weles.hostname = "weles.celestialmachines.com"
+        rootNode.children.append(weles)
+
+
         return rootNode
     }
 }

@@ -8,9 +8,9 @@
 
 import Cocoa
 
+//struct to store metadata about the nodes
 struct MapViewDrawable {
-    var sourceNode: Node
-    
+    var nodeID: Int
     var x: Double
     var y: Double
 }
@@ -35,25 +35,39 @@ extension NodeMapView {
         NSColor.redColor().set()
         NSRectFill(self.bounds)
         
-        self.drawNodes(self.drawables)
+        self.drawTree(self.rootNode)
+        
     }
     
-    func drawNodes(nodes: [MapViewDrawable]) {
-        let _ = nodes.map(self.drawNode)
-    }
-    
-    func drawNode(node: MapViewDrawable) {
-        NSLog("drawing \(node)")
+    func drawTree(root: Node) {
+        if let d = self.findDrawableByNodeID(root.id) {
+            NSLog("drawing \(d): \(root.hostname)")
+        }
+        
+        for c in root.children {
+            drawTree(c)
+        }
+        
     }
 }
 
-//MARK: - helper
+//MARK: - drawable metadata
 extension NodeMapView {
+    func findDrawableByNodeID(nodeID: Int) -> MapViewDrawable? {
+        return self.drawables.filter({ return $0.nodeID == nodeID }).first
+    }
+
     func flattenTree(root: Node) -> [MapViewDrawable] {
-        if root.isLeaf() {
-            return [MapViewDrawable(sourceNode: root, x: 0.0, y: 0.0)]
+        var vec: [MapViewDrawable] = []
+        vec.append(MapViewDrawable(nodeID: root.id, x: 0.0, y: 0.0))
+        for c in root.children {
+            let v2 = flattenTree(c)
+            for c2 in v2 {
+                vec.append(c2)
+            }
         }
-        return flattenTree(root)
+        
+        return vec
     }
     
     func generateDrawables(root: Node) -> [MapViewDrawable] {
