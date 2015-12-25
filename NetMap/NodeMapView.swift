@@ -53,26 +53,6 @@ extension NodeMapView {
         self.renderDrawables(vec)
     }
     
-    func generateDrawables(root: Node) -> [Drawable] {
-        var vec: [Drawable] = []
-        if let cp = self.centerPointForNode(root) {
-            var parentCenter: NSPoint? = nil
-            if let parentID = root.parentID {
-                if let parent = self.findNodeByID(self.rootNode, nodeID: parentID) {
-                    parentCenter = self.centerPointForNode(parent)
-                }
-            }
-            vec.append(Drawable(node: root, center: cp, parentCenter: parentCenter))
-            for c in root.children {
-                let v2 = generateDrawables(c)
-                for c2 in v2 {
-                    vec.append(c2)
-                }
-            }
-        }
-        return vec
-    }
-    
     func renderDrawables(vec: [Drawable]) {
         for d in vec {
             self.drawNodeConnection(d)
@@ -111,15 +91,29 @@ extension NodeMapView {
         s.drawAtPoint(centerPoint, withAttributes: nil)
     }
     
-    //this looks slow but unless we're going to visualize HUGE networks this won't be a problem
-    //if we needed to optimize this we can do away with the recursion and the findNodeByID() call...
-    func centerPointForNode(node: Node) -> NSPoint? {
+    func generateDrawables(root: Node) -> [Drawable] {
+        var vec: [Drawable] = []
+        
+        if let drawable = makeDrawableFromNode(root) {
+            vec.append(drawable)
+            for c in root.children {
+                let v2 = generateDrawables(c)
+                for c2 in v2 {
+                    vec.append(c2)
+                }
+            }
+        }
+        return vec
+    }
+    
+    func makeDrawableFromNode(node: Node) -> Drawable? {
         if let pid = node.parentID {
             guard let parent = self.findNodeByID(self.rootNode, nodeID: pid) else {
-                return nil
+                return nil //a node with a parentID must have a parent node!
             }
-            guard let center = centerPointForNode(parent) else {
-                return nil
+            //this call is expensive. unroll this if profiler complains
+            guard let parentCenter = makeDrawableFromNode(parent)?.center else {
+                return nil //thus it needs to have a parent drawable
             }
             let radius = min(Double(self.bounds.size.width), Double(self.bounds.size.height)) / 3.0
             
@@ -129,13 +123,16 @@ extension NodeMapView {
             if let childNum = parent.children.indexOf({$0.id == node.id}) {
                 let step = 360.0 / Double(childCount)
                 let deg = Double(step * Double(childNum));
-                
-                return NSMakePoint(center.x + CGFloat(sin(deg2rad(deg)) * radius), center.y + CGFloat(cos(deg2rad(deg)) * radius))
+
+                return Drawable(node: node,
+                    center: NSMakePoint(parentCenter.x + CGFloat(sin(deg2rad(deg)) * radius), parentCenter.y + CGFloat(cos(deg2rad(deg)) * radius)),
+                    parentCenter: parentCenter)
             }
-            return nil
+            return nil //we failed
         } else {
             //root node is always in the center
-            return NSPoint(x: self.bounds.size.width/2.0, y: self.bounds.size.height/2.0)
+            return Drawable(node: node, center: NSPoint(x: self.bounds.size.width/2.0, y: self.bounds.size.height/2.0),
+                parentCenter: nil)
         }
     }
 }
