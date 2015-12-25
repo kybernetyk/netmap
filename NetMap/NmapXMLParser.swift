@@ -38,6 +38,11 @@ extension NmapXMLParser {
         rpi.address = "10.0.0.2"
         rpi.hostname = "raspberrypi.local"
         router.appendChild(rpi)
+        
+        var hans = Node(id: self.nextNodeID++, type: .Host)
+        hans.address = "10.0.0.4"
+        hans.hostname = "hans.local"
+        router.appendChild(hans)
 
         rootNode.appendChild(router)
 
