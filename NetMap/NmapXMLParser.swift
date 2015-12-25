@@ -32,12 +32,14 @@ extension NmapXMLParser {
         var router = Node(id: self.nextNodeID++, type: .Host)
         router.address = "10.0.0.1"
         router.hostname = "nighthawk.local"
-        rootNode.appendChild(router)
+
 
         var rpi = Node(id: self.nextNodeID++, type: .Host)
         rpi.address = "10.0.0.2"
         rpi.hostname = "raspberrypi.local"
-        rootNode.appendChild(rpi)
+        router.appendChild(rpi)
+
+        rootNode.appendChild(router)
 
         var macbook = Node(id: self.nextNodeID++, type: .Host)
         macbook.address = "10.0.0.11"
