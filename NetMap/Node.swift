@@ -10,6 +10,15 @@ import Foundation
 
 struct Port {
     var port: Int = 0
+    
+    enum State {
+        case Unknown
+        case Open
+        case Closed
+        //... Blocked, whatever
+    }
+    
+    var state: State = .Unknown
 }
 
 
@@ -45,10 +54,15 @@ extension Node {
     }
     
     func childByID(childID: Int) -> Node? {
+        //the low hanging fruit first mkay?
         for c in self.children {
             if c.id == childID {
                 return c
             }
+        }
+        
+        //now the expensive stuff
+        for c in self.children {
             if let n = c.childByID(childID) {
                 return n
             }
@@ -60,7 +74,7 @@ extension Node {
 //MARK: - public
 extension Node {
     func openPorts() -> [Port] {
-        return []
+        return self.ports.filter({$0.state == .Open})
     }
     
     func isLeaf() -> Bool {
