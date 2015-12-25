@@ -111,10 +111,6 @@ extension NodeMapView {
         s.drawAtPoint(centerPoint, withAttributes: nil)
     }
     
-    func deg2rad(deg : Double) -> Double {
-        return deg * 0.017453292519943295769236907684886
-    }
-    
     //this looks slow but unless we're going to visualize HUGE networks this won't be a problem
     //if we needed to optimize this we can do away with the recursion and the findNodeByID() call...
     func centerPointForNode(node: Node) -> NSPoint? {
@@ -144,12 +140,17 @@ extension NodeMapView {
     }
 }
 
-//MARK: - drawable metadata
+//MARK: - help0r
 extension NodeMapView {
     func findNodeByID(root: Node, nodeID: Int) -> Node? {
         if root.id == nodeID {
             return root
         }
         return root.childByID(nodeID)
+    }
+    
+    //i'm a sucker for DEG heh
+    func deg2rad(deg : Double) -> Double {
+        return deg * 0.017453292519943295769236907684886
     }
 }
