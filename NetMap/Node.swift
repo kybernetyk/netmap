@@ -15,10 +15,40 @@ struct Port {
         case Unknown
         case Open
         case Closed
-        //... Blocked, whatever
+        case Filtered
+
+        init(string: String) {
+            self = .Unknown
+            if string.lowercaseString == "open" {
+                self = .Open
+            }
+            if string.lowercaseString == "closed" {
+                self = .Closed
+            }
+            if string.lowercaseString == "filtered" {
+                self = .Filtered
+            }
+        }
+    }
+    
+    enum Proto {
+        case Unknown
+        case TCP
+        case UDP
+        
+        init(string: String) {
+            self = .Unknown
+            if string.lowercaseString == "tcp" {
+                self = .TCP
+            }
+            if string.lowercaseString == "udp" {
+                self = .UDP
+            }
+        }
     }
     
     var state: State = .Unknown
+    var proto: Proto = .Unknown
 }
 
 

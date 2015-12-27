@@ -46,12 +46,7 @@ extension NmapXMLParser {
     func makeTreeFromXML(xml: XMLIndexer) throws -> Node {
         var rootNode = Node(id: self.nextNodeID++, type: .Network)
 
-//        guard let rootElm = xml["nmaprun"].element else {
-//            throw ParserError.InvalidXMLError(1)
-//        }
-//        let root = xml["nmaprun"]
-        
-
+        //let's just do this here
         let root = try xml.byKey("nmaprun")
         if let hname = root.element?.attributes["startstr"] {
             rootNode.hostname = hname
@@ -67,9 +62,10 @@ extension NmapXMLParser {
 
         let hosts = root.children.filter({$0.element?.name == "host"})
         for h in hosts {
-            if let elm = h.element {
+            if h.element != nil {
                 let addresses = h.children.filter({$0.element?.name == "address"})
                 let hostnames = h.children.filter({$0.element?.name == "hostnames"})
+                let ports = h["ports"].children.filter({$0.element?.name == "port"})
                 
                 var hnode = Node(id: self.nextNodeID++, type: .Host)
                 if let addr = addresses.first?.element?.attributes["addr"] {
@@ -78,8 +74,27 @@ extension NmapXMLParser {
                 if let hname = hostnames.first?.element?.attributes["name"] {
                     hnode.hostname = hname
                 }
+                for p in ports {
+                    if p.element != nil {
+                        var port = Port()
+                        if let port_num_str = p.element?.attributes["portid"] {
+                            if let port_num = Int(port_num_str) {
+                                port.port = port_num
+                            }
+                        }
+                        if let proto = p.element?.attributes["protocol"] {
+                            port.proto = Port.Proto(string: proto)
+                        }
+                        
+                        if let state = p["state"].element?.attributes["state"] {
+                            port.state = Port.State(string: state)
+                        }
+                        
+                        hnode.ports.append(port)
+                    }
+                }
+                
                 rootNode.appendChild(hnode)
-//                NSLog("\(elm)")
             }
         }
         return rootNode;

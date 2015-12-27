@@ -87,7 +87,15 @@ extension NodeMapView {
         NSColor.greenColor().set()
         p.stroke()
         
-        let s = NSString(string: "\(drawable.node.address)\n\(drawable.node.hostname)")
+        var ports: String = ""
+        for p in drawable.node.openPorts() {
+            ports += "\(p.port), "
+        }
+        
+        var s = NSString(string: "\(drawable.node.address)\n\(drawable.node.hostname)")
+        if drawable.node.hasOpenPorts() {
+            s = s.stringByAppendingString("\nPorts:\n\(ports)")
+        }
         s.drawAtPoint(centerPoint, withAttributes: nil)
     }
     
