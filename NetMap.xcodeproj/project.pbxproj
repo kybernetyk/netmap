@@ -19,6 +19,7 @@
 		0D373A551C2C8C1100B4DE88 /* NodeMapViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0D373A531C2C8C1100B4DE88 /* NodeMapViewController.xib */; };
 		0D373A581C2C8C2600B4DE88 /* NodeMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D373A571C2C8C2600B4DE88 /* NodeMapView.swift */; };
 		0D373A5B1C2C8EF000B4DE88 /* Node.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D373A5A1C2C8EF000B4DE88 /* Node.swift */; };
+		0D45E7FA1C2FF510001248E1 /* SWXMLHash.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D45E7F91C2FF510001248E1 /* SWXMLHash.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,6 +37,7 @@
 		0D373A531C2C8C1100B4DE88 /* NodeMapViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NodeMapViewController.xib; sourceTree = "<group>"; };
 		0D373A571C2C8C2600B4DE88 /* NodeMapView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NodeMapView.swift; sourceTree = "<group>"; };
 		0D373A5A1C2C8EF000B4DE88 /* Node.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Node.swift; sourceTree = "<group>"; };
+		0D45E7F91C2FF510001248E1 /* SWXMLHash.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SWXMLHash.framework; path = Carthage/Build/Mac/SWXMLHash.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -43,6 +45,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0D45E7FA1C2FF510001248E1 /* SWXMLHash.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -52,6 +55,7 @@
 		0D373A2C1C2C872200B4DE88 = {
 			isa = PBXGroup;
 			children = (
+				0D45E7F91C2FF510001248E1 /* SWXMLHash.framework */,
 				0D373A371C2C872200B4DE88 /* NetMap */,
 				0D373A361C2C872200B4DE88 /* Products */,
 			);
@@ -127,6 +131,7 @@
 				0D373A311C2C872200B4DE88 /* Sources */,
 				0D373A321C2C872200B4DE88 /* Frameworks */,
 				0D373A331C2C872200B4DE88 /* Resources */,
+				0D45E7FD1C2FF557001248E1 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -183,6 +188,24 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		0D45E7FD1C2FF557001248E1 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/Carthage/Build/Mac/SWXMLHash.framework",
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/myfile",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/usr/local/bin/carthage copy-frameworks";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		0D373A311C2C872200B4DE88 /* Sources */ = {
@@ -299,6 +322,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/Mac",
+				);
 				INFOPLIST_FILE = NetMap/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = io.suborbital.NetMap;
@@ -311,6 +338,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/Mac",
+				);
 				INFOPLIST_FILE = NetMap/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = io.suborbital.NetMap;
@@ -337,6 +368,7 @@
 				0D373A441C2C872200B4DE88 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

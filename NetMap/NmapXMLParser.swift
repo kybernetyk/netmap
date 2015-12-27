@@ -7,37 +7,84 @@
 //
 
 import Foundation
+import SWXMLHash
 
-class NmapXMLParser : NSObject, NSXMLParserDelegate {
+class NmapXMLParser {
     var nextNodeID: Int = 0
     
     enum ParserError : ErrorType {
         case FileOpenError(String)
-        case InvalidXMLError
+        case InvalidXMLError(Int)
     }
     
     func parseXMLFile(file: String) throws -> Project {
         guard let xmldata = NSData(contentsOfFile: file) else {
             throw ParserError.FileOpenError(file)
         }
-        let parser = NSXMLParser(data: xmldata)
-        parser.delegate = self
+        
+        let xml = SWXMLHash.config { config in
+            
+            }.parse(xmldata)
+        
+        switch xml["nmaprun"] {
+        case .Element(_):
+            break
+        case .XMLError(let err):
+            throw err
+        default:
+            throw ParserError.InvalidXMLError(0)
+        }
         
         self.nextNodeID = 0
-        let rootNode = try self.makeTree()
+        let rootNode = try self.makeTreeFromXML(xml)
         let p = Project(representedFile: file, rootNode: rootNode)
         return p
     }
 }
 
-//MARK: - nsxmlparser delegate
 extension NmapXMLParser {
-    func parser(parser: NSXMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String]) {
-        NSLog("start: \(elementName)")
-    }
-}
+    func makeTreeFromXML(xml: XMLIndexer) throws -> Node {
+        var rootNode = Node(id: self.nextNodeID++, type: .Network)
 
-extension NmapXMLParser {
+//        guard let rootElm = xml["nmaprun"].element else {
+//            throw ParserError.InvalidXMLError(1)
+//        }
+//        let root = xml["nmaprun"]
+        
+
+        let root = try xml.byKey("nmaprun")
+        if let hname = root.element?.attributes["startstr"] {
+            rootNode.hostname = hname
+        } else {
+            throw ParserError.InvalidXMLError(1)
+        }
+
+        if let addr = root.element?.attributes["args"] {
+            rootNode.address = addr
+        } else {
+            throw ParserError.InvalidXMLError(2)
+        }
+
+        let hosts = root.children.filter({$0.element?.name == "host"})
+        for h in hosts {
+            if let elm = h.element {
+                let addresses = h.children.filter({$0.element?.name == "address"})
+                let hostnames = h.children.filter({$0.element?.name == "hostnames"})
+                
+                var hnode = Node(id: self.nextNodeID++, type: .Host)
+                if let addr = addresses.first?.element?.attributes["addr"] {
+                    hnode.address = addr
+                }
+                if let hname = hostnames.first?.element?.attributes["name"] {
+                    hnode.hostname = hname
+                }
+                rootNode.appendChild(hnode)
+//                NSLog("\(elm)")
+            }
+        }
+        return rootNode;
+    }
+    
     func makeTree() throws -> Node {
         
         var rootNode = Node(id: self.nextNodeID++, type: .Network)

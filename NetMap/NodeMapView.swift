@@ -87,7 +87,7 @@ extension NodeMapView {
         NSColor.greenColor().set()
         p.stroke()
         
-        let s = NSString(string: drawable.node.hostname)
+        let s = NSString(string: "\(drawable.node.address)\n\(drawable.node.hostname)")
         s.drawAtPoint(centerPoint, withAttributes: nil)
     }
     
