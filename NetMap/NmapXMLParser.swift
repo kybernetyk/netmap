@@ -22,18 +22,7 @@ class NmapXMLParser {
             throw ParserError.FileOpenError(file)
         }
         
-        let xml = SWXMLHash.config { config in
-            
-            }.parse(xmldata)
-        
-        switch xml["nmaprun"] {
-        case .Element(_):
-            break
-        case .XMLError(let err):
-            throw err
-        default:
-            throw ParserError.InvalidXMLError(0)
-        }
+        let xml = SWXMLHash.parse(xmldata)
         
         self.nextNodeID = 0
         let rootNode = try self.makeTreeFromXML(xml)
