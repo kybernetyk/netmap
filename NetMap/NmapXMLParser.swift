@@ -73,14 +73,12 @@ extension NmapXMLParser {
             hnode.hostname = (hostnames.first?.element?.attributes["name"]).value_or("Unknown Hostname")
             
             for p in ports {
-                if p.element != nil {
-                    var port = Port()
-                    port.port = Int((p.element?.attributes["portid"]).value_or("0")).value_or(0)
-                    port.proto = Port.Proto(string: (p.element?.attributes["protocol"]).value_or("Unknown"))
-                    port.state = Port.State(string: (p["state"].element?.attributes["state"]).value_or("Unknown"))
-                    
-                    hnode.ports.append(port)
-                }
+                var port = Port()
+                port.port = Int((p.element?.attributes["portid"]).value_or("0")).value_or(0)
+                port.proto = Port.Proto(string: (p.element?.attributes["protocol"]).value_or("Unknown"))
+                port.state = Port.State(string: (p["state"].element?.attributes["state"]).value_or("Unknown"))
+                
+                hnode.ports.append(port)
             }
             
             rootNode.appendChild(hnode)
