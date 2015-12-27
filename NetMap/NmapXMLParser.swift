@@ -31,10 +31,23 @@ class NmapXMLParser {
     }
 }
 
+//combat the pyramid of doom
+//this will prevent if let ... getting out of hand by passing a valid default value
+//which will be used when the unwrap fails
+//(maybe I'm re-inventing the wheel here and Swift has this already built in?)
+extension Optional {
+    func value_or(val: Wrapped) -> Wrapped {
+        if self != nil {
+            return self!
+        }
+        return val
+    }
+}
+
 extension NmapXMLParser {
     func makeTreeFromXML(xml: XMLIndexer) throws -> Node {
         var rootNode = Node(id: self.nextNodeID++, type: .Network)
-
+        
         //let's just do this here
         let root = try xml.byKey("nmaprun")
         if let hname = root.element?.attributes["startstr"] {
@@ -42,90 +55,36 @@ extension NmapXMLParser {
         } else {
             throw ParserError.InvalidXMLError(1)
         }
-
+        
         if let addr = root.element?.attributes["args"] {
             rootNode.address = addr
         } else {
             throw ParserError.InvalidXMLError(2)
         }
-
+        
         let hosts = root.children.filter({$0.element?.name == "host"})
         for h in hosts {
-            if h.element != nil {
-                let addresses = h.children.filter({$0.element?.name == "address"})
-                let hostnames = h.children.filter({$0.element?.name == "hostnames"})
-                let ports = h["ports"].children.filter({$0.element?.name == "port"})
-                
-                var hnode = Node(id: self.nextNodeID++, type: .Host)
-                if let addr = addresses.first?.element?.attributes["addr"] {
-                    hnode.address = addr
+            let addresses = h.children.filter({$0.element?.name == "address"})
+            let hostnames = h.children.filter({$0.element?.name == "hostnames"})
+            let ports = h["ports"].children.filter({$0.element?.name == "port"})
+            
+            var hnode = Node(id: self.nextNodeID++, type: .Host)
+            hnode.address = (addresses.first?.element?.attributes["addr"]).value_or("Unknown Address")
+            hnode.hostname = (hostnames.first?.element?.attributes["name"]).value_or("Unknown Hostname")
+            
+            for p in ports {
+                if p.element != nil {
+                    var port = Port()
+                    port.port = Int((p.element?.attributes["portid"]).value_or("0")).value_or(0)
+                    port.proto = Port.Proto(string: (p.element?.attributes["protocol"]).value_or("Unknown"))
+                    port.state = Port.State(string: (p["state"].element?.attributes["state"]).value_or("Unknown"))
+                    
+                    hnode.ports.append(port)
                 }
-                if let hname = hostnames.first?.element?.attributes["name"] {
-                    hnode.hostname = hname
-                }
-                for p in ports {
-                    if p.element != nil {
-                        var port = Port()
-                        if let port_num_str = p.element?.attributes["portid"] {
-                            if let port_num = Int(port_num_str) {
-                                port.port = port_num
-                            }
-                        }
-                        if let proto = p.element?.attributes["protocol"] {
-                            port.proto = Port.Proto(string: proto)
-                        }
-                        
-                        if let state = p["state"].element?.attributes["state"] {
-                            port.state = Port.State(string: state)
-                        }
-                        
-                        hnode.ports.append(port)
-                    }
-                }
-                
-                rootNode.appendChild(hnode)
             }
+            
+            rootNode.appendChild(hnode)
         }
         return rootNode;
-    }
-    
-    func makeTree() throws -> Node {
-        
-        var rootNode = Node(id: self.nextNodeID++, type: .Network)
-        rootNode.address = "10.0.0.0/24"
-        rootNode.hostname = "Localnet"
-        
-        var router = Node(id: self.nextNodeID++, type: .Host)
-        router.address = "10.0.0.1"
-        router.hostname = "nighthawk.local"
-        rootNode.appendChild(router)
-        
-        
-        var rpi = Node(id: self.nextNodeID++, type: .Host)
-        rpi.address = "10.0.0.2"
-        rpi.hostname = "raspberrypi.local"
-        rootNode.appendChild(rpi)
-        
-        var hans = Node(id: self.nextNodeID++, type: .Host)
-        hans.address = "10.0.0.4"
-        hans.hostname = "hans.local"
-        rootNode.appendChild(hans)
-        
-        var franz = Node(id: self.nextNodeID++, type: .Host)
-        franz.address = "10.0.0.6"
-        franz.hostname = "franz.local"
-        rootNode.appendChild(franz)
-        
-        var macbook = Node(id: self.nextNodeID++, type: .Host)
-        macbook.address = "10.0.0.11"
-        macbook.hostname = "ducks-macbook.local"
-        rootNode.appendChild(macbook)
-        
-        var weles = Node(id: self.nextNodeID++, type: .Host)
-        weles.address = "10.0.0.23"
-        weles.hostname = "weles.celestialmachines.com"
-        rootNode.appendChild(weles)
-        
-        return rootNode
     }
 }
