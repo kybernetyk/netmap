@@ -14,20 +14,20 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     var controllers: [MapWindowController] = []
     
     func applicationDidFinishLaunching(aNotification: NSNotification) {
-        guard let p = self.workspace.newProjectFromFile("/Users/kyb/Downloads/scan.xml") else {
-            NSLog("fail!")
-            return
+        do {
+            let p = try self.workspace.newProjectFromFile("/Users/kyb/Downloads/scan.xml")
+            let c = MapWindowController(project: p)
+            self.controllers.append(c)
+            c.showWindow(nil)
+        } catch {
+            NSLog("caught \(error)")
         }
-        let c = MapWindowController(project: p)
-        self.controllers.append(c)
-        
-        c.showWindow(nil)
     }
-
+    
     func applicationWillTerminate(aNotification: NSNotification) {
         // Insert code here to tear down your application
     }
-
-
+    
+    
 }
 
