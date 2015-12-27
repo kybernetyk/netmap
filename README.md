@@ -10,6 +10,7 @@ run
 after clone
 
 to generate an XML file do this:
+
     nmap -oX test.xml 10.0.0.0/24
 
 glamour shot:
