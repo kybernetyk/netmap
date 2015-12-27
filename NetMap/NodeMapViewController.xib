@@ -6,15 +6,34 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="NodeMapViewController" customModule="NetMap" customModuleProvider="target">
             <connections>
-                <outlet property="mapView" destination="Hz6-mo-xeY" id="FPP-jS-cWJ"/>
-                <outlet property="view" destination="Hz6-mo-xeY" id="0bl-1N-x8E"/>
+                <outlet property="mapView" destination="rXu-or-UC8" id="Ng4-xs-pgQ"/>
+                <outlet property="view" destination="dMB-4Z-Bvg" id="IXN-wc-WSJ"/>
             </connections>
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
-        <customView id="Hz6-mo-xeY" customClass="NodeMapView" customModule="NetMap" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="480" height="272"/>
+        <scrollView wantsLayer="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" allowsMagnification="YES" minMagnification="1" usesPredominantAxisScrolling="NO" id="dMB-4Z-Bvg">
+            <rect key="frame" x="0.0" y="0.0" width="489" height="469"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-        </customView>
+            <clipView key="contentView" wantsLayer="YES" id="dqH-vS-nFK">
+                <rect key="frame" x="1" y="1" width="487" height="467"/>
+                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                <subviews>
+                    <view wantsLayer="YES" id="rXu-or-UC8" customClass="NodeMapView" customModule="NetMap" customModuleProvider="target">
+                        <rect key="frame" x="0.0" y="0.0" width="487" height="467"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                    </view>
+                </subviews>
+            </clipView>
+            <scroller key="horizontalScroller" verticalHuggingPriority="750" horizontal="YES" id="eME-U7-QVU">
+                <rect key="frame" x="1" y="452" width="487" height="16"/>
+                <autoresizingMask key="autoresizingMask"/>
+            </scroller>
+            <scroller key="verticalScroller" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="7V4-xa-Ej6">
+                <rect key="frame" x="472" y="1" width="16" height="467"/>
+                <autoresizingMask key="autoresizingMask"/>
+            </scroller>
+            <point key="canvasLocation" x="346.5" y="410.5"/>
+        </scrollView>
     </objects>
 </document>

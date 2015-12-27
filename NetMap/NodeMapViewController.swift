@@ -22,6 +22,6 @@ class NodeMapViewController: NSViewController {
         super.viewDidLoad()
         // Do view setup here.
         
-        self.mapView.rootNode = self.project.rootNode
+        self.mapView.rootNode = self.project.filteredRoot
     }    
 }

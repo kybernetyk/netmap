@@ -68,7 +68,7 @@ struct Node {
     var parentID: Int?
     var type: Type
     var address: String = ""
-    var hostname: String = ""
+    var hostname: String? = nil
     
     var ports: [Port] = []
     

@@ -33,8 +33,10 @@ class NodeMapView: NSView {
     }
 
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: coder)
+        self.wantsLayer = true
     }
+    
 }
 
 //MARK: - rendering
@@ -60,6 +62,9 @@ extension NodeMapView {
         for d in vec {
             self.drawNode(d)
         }
+        for d in vec {
+            self.drawNodeLabel(d)
+        }
     }
     
     func drawNodeConnection(drawable: Drawable) {
@@ -67,7 +72,7 @@ extension NodeMapView {
             let p = NSBezierPath()
             p.moveToPoint(pc)
             p.lineToPoint(drawable.center)
-            NSColor.blackColor().set()
+            NSColor.lightGrayColor().colorWithAlphaComponent(0.5).set()
             p.stroke()
         }
     }
@@ -86,17 +91,27 @@ extension NodeMapView {
         
         NSColor.greenColor().set()
         p.stroke()
-        
+    }
+    
+    func drawNodeLabel(drawable: Drawable) {
+        let centerPoint = drawable.center
+
         var ports: String = ""
         for p in drawable.node.openPorts() {
             ports += "\(p.port), "
         }
         
-        var s = NSString(string: "\(drawable.node.address)\n\(drawable.node.hostname)")
-        if drawable.node.hasOpenPorts() {
-            s = s.stringByAppendingString("\nPorts:\n\(ports)")
+        var s = NSString(string: "\(drawable.node.address)")
+        if let hname = drawable.node.hostname {
+            s = s.stringByAppendingString("\n(\(hname))")
         }
-        s.drawAtPoint(centerPoint, withAttributes: nil)
+        if drawable.node.hasOpenPorts() {
+            s = s.stringByAppendingString("\n[\(ports)]")
+        }
+        
+        let font = NSFont.systemFontOfSize(8.0)
+        
+        s.drawAtPoint(centerPoint, withAttributes: [NSFontAttributeName : font])
     }
     
     func generateDrawables(root: Node) -> [Drawable] {
@@ -123,17 +138,31 @@ extension NodeMapView {
             guard let parentCenter = makeDrawableFromNode(parent)?.center else {
                 return nil //thus it needs to have a parent drawable
             }
-            let radius = min(Double(self.bounds.size.width), Double(self.bounds.size.height)) / 3.0
+            let radius = min(Double(self.bounds.size.width), Double(self.bounds.size.height)) / 2.0 - 60
+            let radius2 = min(Double(self.bounds.size.width), Double(self.bounds.size.height)) / 3.0
+            let radius3 = min(Double(self.bounds.size.width), Double(self.bounds.size.height)) / 4.0
             
+            //we apply the filter for open ports only here for now
+            //but
+            
+            let children = parent.children
             //find out which child# we are
             //and calc our position on the circle around our parent node
-            let childCount = parent.children.count
-            if let childNum = parent.children.indexOf({$0.id == node.id}) {
+            let childCount = children.count
+            if let childNum = children.indexOf({$0.id == node.id}) {
                 let step = 360.0 / Double(childCount)
                 let deg = Double(step * Double(childNum));
+                
+                var rad = radius
+                if childNum % 2 == 0 {
+                    rad = radius2
+                }
+                if childNum % 4 == 0 {
+                    rad = radius3
+                }
 
                 return Drawable(node: node,
-                    center: NSMakePoint(parentCenter.x + CGFloat(sin(deg2rad(deg)) * radius), parentCenter.y + CGFloat(cos(deg2rad(deg)) * radius)),
+                    center: NSMakePoint(parentCenter.x + CGFloat(sin(deg2rad(deg)) * rad), parentCenter.y + CGFloat(cos(deg2rad(deg)) * rad)),
                     parentCenter: parentCenter)
             }
             return nil //we failed

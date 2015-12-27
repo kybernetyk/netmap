@@ -52,12 +52,12 @@ extension NmapXMLParser {
         let hosts = root.children.filter({$0.element?.name == "host"})
         for h in hosts {
             let addresses = h.children.filter({$0.element?.name == "address"})
-            let hostnames = h.children.filter({$0.element?.name == "hostnames"})
+            let hostnames = h["hostnames"].children.filter({$0.element?.name == "hostname"})
             let ports = h["ports"].children.filter({$0.element?.name == "port"})
             
             var hnode = Node(id: self.nextNodeID++, type: .Host)
             hnode.address = addresses.first?.element?.attributes["addr"] ?? "Unknown Address"
-            hnode.hostname = hostnames.first?.element?.attributes["name"] ?? "Unknown Hostname"
+            hnode.hostname = hostnames.first?.element?.attributes["name"]// ?? "Unknown Hostname"
             
             for p in ports {
                 var port = Port()
