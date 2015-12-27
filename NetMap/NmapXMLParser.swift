@@ -31,19 +31,6 @@ class NmapXMLParser {
     }
 }
 
-//combat the pyramid of doom
-//this will prevent if let ... getting out of hand by passing a valid default value
-//which will be used when the unwrap fails
-//(maybe I'm re-inventing the wheel here and Swift has this already built in?)
-extension Optional {
-    func value_or(val: Wrapped) -> Wrapped {
-        if self != nil {
-            return self!
-        }
-        return val
-    }
-}
-
 extension NmapXMLParser {
     func makeTreeFromXML(xml: XMLIndexer) throws -> Node {
         var rootNode = Node(id: self.nextNodeID++, type: .Network)
@@ -69,14 +56,14 @@ extension NmapXMLParser {
             let ports = h["ports"].children.filter({$0.element?.name == "port"})
             
             var hnode = Node(id: self.nextNodeID++, type: .Host)
-            hnode.address = (addresses.first?.element?.attributes["addr"]).value_or("Unknown Address")
-            hnode.hostname = (hostnames.first?.element?.attributes["name"]).value_or("Unknown Hostname")
+            hnode.address = addresses.first?.element?.attributes["addr"] ?? "Unknown Address"
+            hnode.hostname = hostnames.first?.element?.attributes["name"] ?? "Unknown Hostname"
             
             for p in ports {
                 var port = Port()
-                port.port = Int((p.element?.attributes["portid"]).value_or("0")).value_or(0)
-                port.proto = Port.Proto(string: (p.element?.attributes["protocol"]).value_or("Unknown"))
-                port.state = Port.State(string: (p["state"].element?.attributes["state"]).value_or("Unknown"))
+                port.port = Int(p.element?.attributes["portid"] ?? "0") ?? 0
+                port.proto = Port.Proto(string: p.element?.attributes["protocol"] ?? "Unknown")
+                port.state = Port.State(string: p["state"].element?.attributes["state"] ?? "Unknown")
                 
                 hnode.ports.append(port)
             }
