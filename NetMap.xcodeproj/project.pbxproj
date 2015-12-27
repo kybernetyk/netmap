@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0D27106B1C3007D800EE12E3 /* SWXMLHash.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 0D45E7F91C2FF510001248E1 /* SWXMLHash.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		0D373A391C2C872200B4DE88 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D373A381C2C872200B4DE88 /* AppDelegate.swift */; };
 		0D373A3B1C2C872200B4DE88 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0D373A3A1C2C872200B4DE88 /* Assets.xcassets */; };
 		0D373A3E1C2C872200B4DE88 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0D373A3C1C2C872200B4DE88 /* MainMenu.xib */; };
@@ -22,7 +23,21 @@
 		0D45E7FA1C2FF510001248E1 /* SWXMLHash.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D45E7F91C2FF510001248E1 /* SWXMLHash.framework */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		0D27106A1C3007CF00EE12E3 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				0D27106B1C3007D800EE12E3 /* SWXMLHash.framework in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		0D27106C1C30080800EE12E3 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		0D373A351C2C872200B4DE88 /* NetMap.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NetMap.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0D373A381C2C872200B4DE88 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0D373A3A1C2C872200B4DE88 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -55,6 +70,7 @@
 		0D373A2C1C2C872200B4DE88 = {
 			isa = PBXGroup;
 			children = (
+				0D27106C1C30080800EE12E3 /* README.md */,
 				0D45E7F91C2FF510001248E1 /* SWXMLHash.framework */,
 				0D373A371C2C872200B4DE88 /* NetMap */,
 				0D373A361C2C872200B4DE88 /* Products */,
@@ -131,7 +147,7 @@
 				0D373A311C2C872200B4DE88 /* Sources */,
 				0D373A321C2C872200B4DE88 /* Frameworks */,
 				0D373A331C2C872200B4DE88 /* Resources */,
-				0D45E7FD1C2FF557001248E1 /* ShellScript */,
+				0D27106A1C3007CF00EE12E3 /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -188,24 +204,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		0D45E7FD1C2FF557001248E1 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"$(SRCROOT)/Carthage/Build/Mac/SWXMLHash.framework",
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/myfile",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "/usr/local/bin/carthage copy-frameworks";
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		0D373A311C2C872200B4DE88 /* Sources */ = {
