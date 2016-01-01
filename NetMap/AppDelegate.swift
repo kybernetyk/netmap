@@ -14,20 +14,39 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     var controllers: [MapWindowController] = []
     
     func applicationDidFinishLaunching(aNotification: NSNotification) {
-        do {
-            let p = try self.workspace.newProjectFromFile("/Users/kyb/Downloads/scan.xml")
-            let c = MapWindowController(project: p)
-            self.controllers.append(c)
-            c.showWindow(nil)
-        } catch {
-            NSLog("caught \(error)")
-        }
+//        self.spawnNewDocumentWindowWithDocumentAtPath("/Users/kyb/Downloads/scan.xml")
     }
     
     func applicationWillTerminate(aNotification: NSNotification) {
         // Insert code here to tear down your application
     }
     
-    
+    func spawnNewDocumentWindowWithDocumentAtPath(path: String) {
+        do {
+            let p = try self.workspace.newProjectFromFile(path)
+            let c = MapWindowController(project: p)
+            self.controllers.append(c)
+            c.showWindow(nil)
+            NSDocumentController.sharedDocumentController().noteNewRecentDocumentURL(NSURL.fileURLWithPath(path))
+        } catch {
+            NSLog("caught \(error)")
+        }
+    }
+}
+
+extension AppDelegate {
+    @IBAction func openDocument(sender: AnyObject?) {
+        let panel = NSOpenPanel()
+        panel.allowsMultipleSelection = false
+        panel.allowedFileTypes = ["xml"]
+        
+        let result = panel.runModal()
+        if result == NSFileHandlingPanelCancelButton {
+            return
+        }
+        if let fn = panel.URL?.path {
+            self.spawnNewDocumentWindowWithDocumentAtPath(fn)
+        }
+    }
 }
 

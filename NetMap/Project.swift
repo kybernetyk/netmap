@@ -40,13 +40,13 @@ extension Project {
         }
         
         //apply self.filter
-//        if node.ports.filter({$0.state == Port.State.Open && [80, 21, 25, 22, 443].contains($0.port)}).count > 0 {
-//            return true
-//        }
-        
-        if node.hasOpenPorts() {
+        if node.ports.filter({$0.state == Port.State.Open && [21, 22, 23, 25, 80, ].contains($0.port)}).count > 0 {
             return true
         }
+        
+//        if node.hasOpenPorts() {
+//            return true
+//        }
         
         //default: DENIED
         return false
