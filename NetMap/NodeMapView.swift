@@ -98,7 +98,7 @@ extension NodeMapView {
 
         var ports: String = ""
         for p in drawable.node.openPorts() {
-            ports += "\(p.port), "
+            ports += "\(p.rawValue), "
         }
         
         var s = NSString(string: "\(drawable.node.address)")

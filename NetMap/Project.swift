@@ -10,7 +10,17 @@ import Foundation
 
 class Project {
     let representedFile: String
-    let rootNode: Node
+    fileprivate let rootNode: Node
+    
+    fileprivate var nodeFilter: (Node) -> Bool = { node in
+//        return node.hasOpenPorts()
+        
+//        return node.openPorts().contains {$0.port == 22}
+        
+        return node.ports.filter{ port in
+            port.state == .open && [80, 443, 8080, 8000].contains(port.rawValue)
+        }.count > 0
+    }
   
     //later:
     //var filter ...
@@ -23,36 +33,48 @@ class Project {
 
 //MARK: - public
 extension Project {
+    //TODO: user supplied filter
+    //func applyFilter(func<Node -> Bool>) { ... }
+    
     //the root node with our filter applied
     var filteredRoot: Node {
         get {
             return self.filtered(rootNode)
         }
     }
+    
+    //all nodes unfiltered
+    var unfilteredRoot: Node {
+        get {
+            return self.rootNode
+        }
+    }
 }
 
 //MARK: - filtering
 extension Project {
-    internal func nodeConformsToFilter(_ node: Node) -> Bool {
+    private func nodeConformsToFilter(_ node: Node) -> Bool {
         //nodes with children always are to be included
         if node.children.count > 0 {
             return true
         }
         
-        //apply self.filter
-        if node.ports.filter({$0.state == Port.State.open && [21, 22, 23, 25, 80, ].contains($0.port)}).count > 0 {
-            return true
-        }
-        
-        if node.hasOpenPorts() {
-            return true
-        }
-        
-        //default: DENIED
-        return false
+        return self.nodeFilter(node)
+//        
+//        //apply self.filter
+//        if node.ports.filter({$0.state == Port.State.open && [21, 22, 23, 25, 80, ].contains($0.port)}).count > 0 {
+//            return true
+//        }
+//        
+//        if node.hasOpenPorts() {
+//            return true
+//        }
+//        
+//        //default: DENIED
+//        return false
     }
     
-    internal func filtered(_ root: Node) -> Node {
+    fileprivate func filtered(_ root: Node) -> Node {
         var node = root
         node.children = node.children.filter({nodeConformsToFilter($0)})
         

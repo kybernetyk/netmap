@@ -66,7 +66,7 @@ extension NmapXMLParser {
             
             for p in ports {
                 var port = Port()
-                port.port = Int(p.element?.attributes["portid"] ?? "0") ?? 0
+                port.rawValue = Int(p.element?.attributes["portid"] ?? "0") ?? 0
                 port.proto = Port.Proto(string: p.element?.attributes["protocol"] ?? "Unknown")
                 port.state = Port.State(string: p["state"].element?.attributes["state"] ?? "Unknown")
                 

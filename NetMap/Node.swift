@@ -9,7 +9,7 @@
 import Foundation
 
 struct Port {
-    var port: Int = 0
+    var rawValue: Int = 0
     
     enum State {
         case unknown

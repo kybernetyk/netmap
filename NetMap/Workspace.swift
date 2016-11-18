@@ -11,9 +11,10 @@ import Foundation
 class Workspace {
     var projects: [Project] = []
     
-    func newProjectFromFile(_ file: String) throws -> Project {
+    func openProjectFile(path: String) throws -> Project {
+        //TODO: look up self.project if file already opened ...
         let parser = NmapXMLParser()
-        let p = try parser.parseXMLFile(file)
+        let p = try parser.parseXMLFile(path)
         self.projects.append(p)
         return p
     }

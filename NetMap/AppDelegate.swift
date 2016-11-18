@@ -23,7 +23,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     func spawnNewDocumentWindowWithDocumentAtPath(_ path: String) {
         do {
-            let p = try self.workspace.newProjectFromFile(path)
+            let p = try self.workspace.openProjectFile(path: path)
             let c = MapWindowController(project: p)
             self.controllers.append(c)
             c.showWindow(nil)
