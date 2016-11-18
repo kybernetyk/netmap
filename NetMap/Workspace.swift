@@ -11,7 +11,7 @@ import Foundation
 class Workspace {
     var projects: [Project] = []
     
-    func newProjectFromFile(file: String) throws -> Project {
+    func newProjectFromFile(_ file: String) throws -> Project {
         let parser = NmapXMLParser()
         let p = try parser.parseXMLFile(file)
         self.projects.append(p)

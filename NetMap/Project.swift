@@ -33,30 +33,30 @@ extension Project {
 
 //MARK: - filtering
 extension Project {
-    internal func nodeConformsToFilter(node: Node) -> Bool {
+    internal func nodeConformsToFilter(_ node: Node) -> Bool {
         //nodes with children always are to be included
         if node.children.count > 0 {
             return true
         }
         
         //apply self.filter
-        if node.ports.filter({$0.state == Port.State.Open && [21, 22, 23, 25, 80, ].contains($0.port)}).count > 0 {
+        if node.ports.filter({$0.state == Port.State.open && [21, 22, 23, 25, 80, ].contains($0.port)}).count > 0 {
             return true
         }
         
-//        if node.hasOpenPorts() {
-//            return true
-//        }
+        if node.hasOpenPorts() {
+            return true
+        }
         
         //default: DENIED
         return false
     }
     
-    internal func filtered(root: Node) -> Node {
+    internal func filtered(_ root: Node) -> Node {
         var node = root
         node.children = node.children.filter({nodeConformsToFilter($0)})
         
-        for var i = 0; i < node.children.count; i++ {
+        for i in 0 ..< node.children.count {
             node.children[i] = self.filtered(node.children[i])
         }
         

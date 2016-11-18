@@ -31,7 +31,7 @@ extension MapWindowController {
         self.addControllerToAnchor(self.mapViewController, anchor: self.anchorForMapView)
     }
     
-    func addControllerToAnchor(controller: NSViewController, anchor: NSView) {
+    func addControllerToAnchor(_ controller: NSViewController, anchor: NSView) {
         controller.view.frame = anchor.bounds
         anchor.addSubview(controller.view)
     }

@@ -12,14 +12,14 @@ import SWXMLHash
 class NmapXMLParser {
     var nextNodeID: Int = 0
     
-    enum ParserError : ErrorType {
-        case FileOpenError(String)
-        case InvalidXMLError(Int)
+    enum ParserError : Error {
+        case fileOpenError(String)
+        case invalidXMLError(Int)
     }
     
-    func parseXMLFile(file: String) throws -> Project {
-        guard let xmldata = NSData(contentsOfFile: file) else {
-            throw ParserError.FileOpenError(file)
+    func parseXMLFile(_ file: String) throws -> Project {
+        guard let xmldata = try? Data(contentsOf: URL(fileURLWithPath: file)) else {
+            throw ParserError.fileOpenError(file)
         }
         
         let xml = SWXMLHash.parse(xmldata)
@@ -32,21 +32,24 @@ class NmapXMLParser {
 }
 
 extension NmapXMLParser {
-    func makeTreeFromXML(xml: XMLIndexer) throws -> Node {
-        var rootNode = Node(id: self.nextNodeID++, type: .Network)
+    func makeTreeFromXML(_ xml: XMLIndexer) throws -> Node {
+        self.nextNodeID += 1
+        let nodeid = self.nextNodeID
+        
+        var rootNode = Node(id: nodeid, kind: .network)
         
         //let's just do this here
         let root = try xml.byKey("nmaprun")
         if let hname = root.element?.attributes["startstr"] {
             rootNode.hostname = hname
         } else {
-            throw ParserError.InvalidXMLError(1)
+            throw ParserError.invalidXMLError(1)
         }
         
         if let addr = root.element?.attributes["args"] {
             rootNode.address = addr
         } else {
-            throw ParserError.InvalidXMLError(2)
+            throw ParserError.invalidXMLError(2)
         }
         
         let hosts = root.children.filter({$0.element?.name == "host"})
@@ -55,7 +58,9 @@ extension NmapXMLParser {
             let hostnames = h["hostnames"].children.filter({$0.element?.name == "hostname"})
             let ports = h["ports"].children.filter({$0.element?.name == "port"})
             
-            var hnode = Node(id: self.nextNodeID++, type: .Host)
+            self.nextNodeID += 1
+            let nodeid = self.nextNodeID
+            var hnode = Node(id: nodeid, kind: .host)
             hnode.address = addresses.first?.element?.attributes["addr"] ?? "Unknown Address"
             hnode.hostname = hostnames.first?.element?.attributes["name"]// ?? "Unknown Hostname"
             

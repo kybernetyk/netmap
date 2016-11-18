@@ -12,61 +12,61 @@ struct Port {
     var port: Int = 0
     
     enum State {
-        case Unknown
-        case Open
-        case Closed
-        case Filtered
+        case unknown
+        case open
+        case closed
+        case filtered
 
         init(string: String) {
-            self = .Unknown
-            if string.lowercaseString == "open" {
-                self = .Open
+            self = .unknown
+            if string.lowercased() == "open" {
+                self = .open
             }
-            if string.lowercaseString == "closed" {
-                self = .Closed
+            if string.lowercased() == "closed" {
+                self = .closed
             }
-            if string.lowercaseString == "filtered" {
-                self = .Filtered
+            if string.lowercased() == "filtered" {
+                self = .filtered
             }
         }
     }
     
     enum Proto {
-        case Unknown
-        case TCP
-        case UDP
+        case unknown
+        case tcp
+        case udp
         
         init(string: String) {
-            self = .Unknown
-            if string.lowercaseString == "tcp" {
-                self = .TCP
+            self = .unknown
+            if string.lowercased() == "tcp" {
+                self = .tcp
             }
-            if string.lowercaseString == "udp" {
-                self = .UDP
+            if string.lowercased() == "udp" {
+                self = .udp
             }
         }
     }
     
-    var state: State = .Unknown
-    var proto: Proto = .Unknown
+    var state: State = .unknown
+    var proto: Proto = .unknown
 }
 
 
 struct Node {
-    init(id: Int, type: Type) {
+    init(id: Int, kind: Kind) {
         self.id = id
         self.parentID = nil
-        self.type = type
+        self.kind = kind
     }
     
-    enum Type {
-        case Host
-        case Network
+    enum Kind {
+        case host
+        case network
     }
     
     var id: Int
     var parentID: Int?
-    var type: Type
+    var kind: Kind
     var address: String = ""
     var hostname: String? = nil
     
@@ -77,13 +77,13 @@ struct Node {
 
 //MARK: - tree manipulation
 extension Node {
-    mutating func appendChild(child: Node) {
+    mutating func appendChild(_ child: Node) {
         var child = child
         child.parentID = self.id
         self.children.append(child)
     }
     
-    func childByID(childID: Int) -> Node? {
+    func childByID(_ childID: Int) -> Node? {
         //the low hanging fruit first mkay?
         for c in self.children {
             if c.id == childID {
@@ -104,7 +104,7 @@ extension Node {
 //MARK: - public
 extension Node {
     func openPorts() -> [Port] {
-        return self.ports.filter({$0.state == .Open})
+        return self.ports.filter({$0.state == .open})
     }
     
     func isLeaf() -> Bool {

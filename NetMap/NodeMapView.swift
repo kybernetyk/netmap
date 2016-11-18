@@ -41,13 +41,13 @@ class NodeMapView: NSView {
 
 //MARK: - rendering
 extension NodeMapView {
-    override func drawRect(dirtyRect: NSRect) {
-        super.drawRect(dirtyRect)
+    override func draw(_ dirtyRect: NSRect) {
+        super.draw(dirtyRect)
         
-        NSColor.whiteColor().set()
+        NSColor.white.set()
         NSRectFill(self.bounds)
         
-        NSColor.darkGrayColor().set()
+        NSColor.darkGray.set()
         NSFrameRect(self.bounds)
         
         //we can use this to later set sublayer coordinates
@@ -55,7 +55,7 @@ extension NodeMapView {
         self.renderDrawables(vec)
     }
     
-    func renderDrawables(vec: [Drawable]) {
+    func renderDrawables(_ vec: [Drawable]) {
         for d in vec {
             self.drawNodeConnection(d)
         }
@@ -67,33 +67,33 @@ extension NodeMapView {
         }
     }
     
-    func drawNodeConnection(drawable: Drawable) {
+    func drawNodeConnection(_ drawable: Drawable) {
         if let pc = drawable.parentCenter {
             let p = NSBezierPath()
-            p.moveToPoint(pc)
-            p.lineToPoint(drawable.center)
-            NSColor.lightGrayColor().colorWithAlphaComponent(0.5).set()
+            p.move(to: pc)
+            p.line(to: drawable.center)
+            NSColor.lightGray.withAlphaComponent(0.5).set()
             p.stroke()
         }
     }
     
-    func drawNode(drawable: Drawable) {
+    func drawNode(_ drawable: Drawable) {
         let centerPoint = drawable.center
         let r = NSMakeRect(centerPoint.x - 35/2, centerPoint.y - 35/2, 35, 35)
         let p = NSBezierPath(roundedRect: r, xRadius: 4, yRadius: 4)
         
         if drawable.node.parentID == nil {
-            NSColor.redColor().set()
+            NSColor.red.set()
         } else {
-            NSColor.yellowColor().set()
+            NSColor.yellow.set()
         }
         p.fill()
         
-        NSColor.greenColor().set()
+        NSColor.green.set()
         p.stroke()
     }
     
-    func drawNodeLabel(drawable: Drawable) {
+    func drawNodeLabel(_ drawable: Drawable) {
         let centerPoint = drawable.center
 
         var ports: String = ""
@@ -103,18 +103,18 @@ extension NodeMapView {
         
         var s = NSString(string: "\(drawable.node.address)")
         if let hname = drawable.node.hostname {
-            s = s.stringByAppendingString("\n(\(hname))")
+            s = s.appending("\n(\(hname))") as NSString
         }
         if drawable.node.hasOpenPorts() {
-            s = s.stringByAppendingString("\n[\(ports)]")
+            s = s.appending("\n[\(ports)]") as NSString
         }
         
-        let font = NSFont.systemFontOfSize(8.0)
+        let font = NSFont.systemFont(ofSize: 8.0)
         
-        s.drawAtPoint(centerPoint, withAttributes: [NSFontAttributeName : font])
+        s.draw(at: centerPoint, withAttributes: [NSFontAttributeName : font])
     }
     
-    func generateDrawables(root: Node) -> [Drawable] {
+    func generateDrawables(_ root: Node) -> [Drawable] {
         var vec: [Drawable] = []
         
         if let drawable = makeDrawableFromNode(root) {
@@ -129,7 +129,7 @@ extension NodeMapView {
         return vec
     }
     
-    func makeDrawableFromNode(node: Node) -> Drawable? {
+    func makeDrawableFromNode(_ node: Node) -> Drawable? {
         if let pid = node.parentID {
             guard let parent = self.findNodeByID(self.rootNode, nodeID: pid) else {
                 return nil //a node with a parentID must have a parent node!
@@ -149,7 +149,7 @@ extension NodeMapView {
             //find out which child# we are
             //and calc our position on the circle around our parent node
             let childCount = children.count
-            if let childNum = children.indexOf({$0.id == node.id}) {
+            if let childNum = children.index(where: {$0.id == node.id}) {
                 let step = 360.0 / Double(childCount)
                 let deg = Double(step * Double(childNum));
                 
@@ -176,7 +176,7 @@ extension NodeMapView {
 
 //MARK: - help0r
 extension NodeMapView {
-    func findNodeByID(root: Node, nodeID: Int) -> Node? {
+    func findNodeByID(_ root: Node, nodeID: Int) -> Node? {
         if root.id == nodeID {
             return root
         }
@@ -184,7 +184,7 @@ extension NodeMapView {
     }
     
     //i'm a sucker for DEG heh
-    func deg2rad(deg : Double) -> Double {
+    func deg2rad(_ deg : Double) -> Double {
         return deg * 0.017453292519943295769236907684886
     }
 }
