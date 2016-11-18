@@ -40,14 +40,14 @@ extension NmapXMLParser {
         
         //let's just do this here
         let root = try xml.byKey("nmaprun")
-        if let hname = root.element?.attributes["startstr"] {
-            rootNode.hostname = hname
+        if let hname = root.element?.allAttributes["startstr"] {
+            rootNode.hostname = hname.text
         } else {
             throw ParserError.invalidXMLError(1)
         }
         
-        if let addr = root.element?.attributes["args"] {
-            rootNode.address = addr
+        if let addr = root.element?.allAttributes["args"] {
+            rootNode.address = addr.text
         } else {
             throw ParserError.invalidXMLError(2)
         }
@@ -61,14 +61,14 @@ extension NmapXMLParser {
             self.nextNodeID += 1
             let nodeid = self.nextNodeID
             var hnode = Node(id: nodeid, kind: .host)
-            hnode.address = addresses.first?.element?.attributes["addr"] ?? "Unknown Address"
-            hnode.hostname = hostnames.first?.element?.attributes["name"]// ?? "Unknown Hostname"
+            hnode.address = addresses.first?.element?.allAttributes["addr"]?.text ?? "Unknown Address"
+            hnode.hostname = hostnames.first?.element?.allAttributes["name"]?.text // ?? "Unknown Hostname"
             
             for p in ports {
                 var port = Port()
-                port.rawValue = Int(p.element?.attributes["portid"] ?? "0") ?? 0
-                port.proto = Port.Proto(string: p.element?.attributes["protocol"] ?? "Unknown")
-                port.state = Port.State(string: p["state"].element?.attributes["state"] ?? "Unknown")
+                port.rawValue = Int(p.element?.allAttributes["portid"]?.text ?? "0") ?? 0
+                port.proto = Port.Proto(string: p.element?.allAttributes["protocol"]?.text ?? "Unknown")
+                port.state = Port.State(string: p["state"].element?.allAttributes["state"]?.text ?? "Unknown")
                 
                 hnode.ports.append(port)
             }
