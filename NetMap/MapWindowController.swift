@@ -20,6 +20,7 @@ extension MapWindowController {
     convenience init(project: Project) {
         self.init(windowNibName: "MapWindowController")
         self.project = project
+        self.project.applyFilter(f: DefaultFilters.interestingPorts)
     }
 
     override func windowDidLoad() {

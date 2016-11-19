@@ -8,34 +8,47 @@
 
 import Foundation
 
+struct DefaultFilters {
+    static func webServices(node: Node) -> Bool {
+        return node.ports.filter{ port in
+            port.state == .open && [80, 443, 8080, 8000].contains(port.rawValue)
+            }.count > 0
+    }
+    
+    static func interestingPorts(node: Node) -> Bool {
+        return node.ports.filter{ port in
+            port.state == .open && [21, 22, 23, 25, 80].contains(port.rawValue)
+            }.count > 0
+    }
+    
+    static func hasOpenPorts(node: Node) -> Bool {
+        return node.openPorts().count > 0
+    }
+}
+
+
 class Project {
     let representedFile: String
     fileprivate let rootNode: Node
     
-    fileprivate var nodeFilter: (Node) -> Bool = { node in
-//        return node.hasOpenPorts()
-        
-//        return node.openPorts().contains {$0.port == 22}
-        
-        return node.ports.filter{ port in
-            port.state == .open && [80, 443, 8080, 8000].contains(port.rawValue)
-        }.count > 0
-    }
+    typealias FilterFunc = (Node) -> Bool
+    fileprivate var nodeFilter: FilterFunc
   
-    //later:
-    //var filter ...
-    
     init(representedFile: String, rootNode: Node) {
         self.representedFile = representedFile
         self.rootNode = rootNode
+        
+        self.nodeFilter = DefaultFilters.hasOpenPorts
     }
 }
 
+
 //MARK: - public
 extension Project {
-    //TODO: user supplied filter
-    //func applyFilter(func<Node -> Bool>) { ... }
-    
+    func applyFilter(f: @escaping FilterFunc) {
+        self.nodeFilter = f
+    }
+
     //the root node with our filter applied
     var filteredRoot: Node {
         get {
@@ -60,21 +73,10 @@ extension Project {
         }
         
         return self.nodeFilter(node)
-//        
-//        //apply self.filter
-//        if node.ports.filter({$0.state == Port.State.open && [21, 22, 23, 25, 80, ].contains($0.port)}).count > 0 {
-//            return true
-//        }
-//        
-//        if node.hasOpenPorts() {
-//            return true
-//        }
-//        
-//        //default: DENIED
-//        return false
     }
-    
+
     fileprivate func filtered(_ root: Node) -> Node {
+        
         var node = root
         node.children = node.children.filter({nodeConformsToFilter($0)})
         
